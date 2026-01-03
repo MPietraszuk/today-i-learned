@@ -1,70 +1,175 @@
-# Getting Started with Create React App
+# Today I Learned (React + Supabase)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A small “Today I Learned” app built with **React** and **Supabase**.
 
-## Available Scripts
+This project originally started with **Create React App (CRA)**, but was refactored to **Vite** after running into tooling/version conflicts (details below).
 
-In the project directory, you can run:
+---
 
-### `npm start`
+##### Why I migrated from CRA → Vite
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+This project was initially scaffolded as a CRA app, but I hit multiple issues:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- `react-scripts` was missing / broken (installed as `react-scripts@0.0.0`)
+- CRA (react-scripts v5) is not a great match for **React 19** and newer Node versions
+- My environment was running a modern Node/NPM combo, and CRA tooling became the bottleneck
 
-### `npm test`
+To keep React 19 and get a reliable dev server/build pipeline, I migrated to **Vite**, which is lighter, faster, and plays nicely with current React + Node.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+##### Tech Stack
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **React** (React 19)
+- **Vite** (dev server + bundler)
+- **Supabase** (Postgres + API)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+##### Running the App Locally
 
-### `npm run eject`
+Follow these steps to download and run the project on your own machine.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+##### Prerequisites
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Make sure you have the following installed:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **Node.js** (v18+ recommended)
+- **npm** (comes with Node)
+- A **Supabase account** (free tier is fine)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+You can verify Node and npm with:
 
-## Learn More
+```
+bash
+node -v
+npm -v
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+##### 1) Clone the repository
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+> git clone https://github.com/YOUR_USERNAME/today-i-learned.git
+> cd today-i-learned
 
-### Code Splitting
+##### 2) Install dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+> bash
+> npm install
 
-### Analyzing the Bundle Size
+##### 3) Configure Supabase environment variables
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Create a `.env` file in the project root:
 
-### Making a Progressive Web App
+> bash
+> VITE_SUPABASE_URL="https://YOUR_PROJECT_ID.supabase.co"
+> VITE_SUPABASE_ANON_KEY="YOUR_PUBLIC_ANON_KEY"
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+⚠️ Important
+Vite only exposes environment variables prefixed with VITE*.
+Using `REACT_APP*\*` (CRA style) will not work.
 
-### Advanced Configuration
+You can find these values in the Supabase dashboard:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Settings → API → Project URL
 
-### Deployment
+Settings → API → anon public key
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+##### 4) Run the development server
 
-### `npm run build` fails to minify
+> npm run dev
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Vite will start the dev server and print a local URL, typically:
+
+> http://localhost:5173
+
+Open that URL in your browser.
+
+##### 5) Build for production (optional)
+
+> npm run build
+
+To preview the production build locally:
+
+> bash
+> npm run preview
+
+##### Using the App
+
+Viewing Facts
+
+- When the app loads, it fetches a list of “facts” from Supabase
+
+- Facts are displayed immediately without needing to sign in
+
+##### Adding a New Fact
+
+- Enter the fact text
+
+- Select a category (if applicable)
+
+- Submit the form
+
+- The new fact is saved to the Supabase database and appears in the list
+
+**Note:** Inserts work because Row Level Security (RLS) policies allow public inserts.
+
+##### Updating Facts
+
+- Facts can be updated directly in the UI (depending on enabled features)
+
+- Updates are permitted via Supabase RLS policies
+
+This is intentionally permissive for learning/demo purposes.
+In a production app, updates would typically be restricted to authenticated users or content owners.
+
+##### Data Persistence
+
+- All data is stored in a Supabase Postgres database
+
+- Refreshing the page does not reset the data
+
+- Changes are reflected immediately for all users
+
+##### Notes on Security & Scope
+
+This project is intentionally simple and educational:
+
+- Public read/write access is enabled via Supabase RLS
+
+- No authentication is required
+
+- No admin role or moderation workflow is implemented
+
+These tradeoffs were made to:
+
+- Focus on React + Vite tooling
+
+- Learn Supabase RLS concepts
+
+- Avoid scope creep for an MVP
+
+##### Possible Future Enhancements
+
+- User authentication (Supabase Auth)
+
+- Per-user fact ownership
+
+- Voting or likes
+
+- Moderation / approval flow
+
+- Pagination and filtering
+
+- Improved validation and error handling
+
+##### Summary
+
+This project demonstrates:
+
+- Migrating from Create React App → Vite
+
+- Running modern React (19) with a fast dev setup
+
+- Using Supabase as a backend with Row Level Security
+
+- Building a small but complete full-stack React app
