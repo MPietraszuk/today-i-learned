@@ -257,7 +257,12 @@ footer a:link, footer a:active, footer a:visited {
 footer a:hover {
   color: orange;
 }
-
+footer .red {
+  color: #ef4444;
+}
+footer .black {
+  /* color: #000000; */
+}
 
 @media (max-width: 1000px) {
   body {
