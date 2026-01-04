@@ -51,6 +51,21 @@ function App() {
           <FactList facts={facts} setFacts={setFacts} />
         )}
       </main>
+      <footer>
+        ©2025{" "}
+        <script>
+          new Date().getFullYear() > 2025 && document.write(" - " + new
+          Date().getFullYear());
+        </script>
+        - 2026
+        <a href="https://www.markpietraszuk.com/" target="_blank">
+          {" "}
+          Mark Pietraszuk
+        </a>
+        <br />
+        Made with <i className="icon ion-heart red"></i> &amp;{" "}
+        <i className="icon ion-coffee black"></i> in Laguna Niguel, CA US
+      </footer>
     </>
   );
 }
